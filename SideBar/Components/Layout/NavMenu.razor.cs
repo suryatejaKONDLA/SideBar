@@ -4,8 +4,8 @@ public partial class NavMenu
 {
     private List<MenuItem> MenuItems =
     [
-        new MenuItem { Title = "Home", Icon = "fa-home", Link = "#" },
-        new MenuItem
+        new() { Title = "Home", Icon = "fa-home", Link = "#" },
+        new()
         {
             Title = "Plugins",
             Icon = "fa-plug",
@@ -27,7 +27,7 @@ public partial class NavMenu
             ]
         },
 
-        new MenuItem
+        new()
         {
             Title = "Users",
             Icon = "fa-user",

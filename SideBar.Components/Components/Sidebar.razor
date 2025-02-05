@@ -1,16 +1,16 @@
-﻿<div class="wrapper @(IsToggled ? "toggled" : "")">
+﻿@inject ISidebarService SidebarService
+@implements IDisposable
+<div class="wrapper @(SidebarService.IsToggled ? "toggled" : "")">
     <aside class="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a @onclick="ToggleSidebar" class="sidebar-toggle">
+            <a class="sidebar-toggle"
+               @onclick="ToggleSidebar">
                 <i class="fa fa-bars"></i>
             </a>
-            <h2>@(BrandTitle)</h2>
+            <h2>@BrandTitle</h2>
         </div>
         <ul class="sidebar-nav">
-            @(RenderMenuItems(MenuItems))
+            @RenderMenuItems(MenuItems)
         </ul>
     </aside>
 </div>
-<style>
-
-</style>

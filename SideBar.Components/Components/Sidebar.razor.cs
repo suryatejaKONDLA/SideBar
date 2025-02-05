@@ -2,18 +2,16 @@
 
 public partial class Sidebar : ComponentBase
 {
+    private MenuItem ActiveParent;
     [Parameter] public string BrandTitle { get; set; } = "My App";
 
     [Parameter] public List<MenuItem> MenuItems { get; set; } = [];
 
-    private bool IsToggled = false;
+    public void Dispose() { SidebarService.OnChange -= StateHasChanged; }
 
-    private MenuItem ActiveParent;
+    protected override void OnInitialized() { SidebarService.OnChange += StateHasChanged; }
 
-    private void ToggleSidebar()
-    {
-        IsToggled = !IsToggled;
-    }
+    private void ToggleSidebar() { SidebarService.Toggle(); }
 
     private void ToggleSubMenu(MenuItem item)
     {
@@ -34,10 +32,7 @@ public partial class Sidebar : ComponentBase
         }
     }
 
-    private static bool IsInHierarchy(MenuItem parent, MenuItem target)
-    {
-        return parent == target || parent.SubMenu.Any(child => IsInHierarchy(child, target));
-    }
+    private static bool IsInHierarchy(MenuItem parent, MenuItem target) { return parent == target || parent.SubMenu.Any(child => IsInHierarchy(child, target)); }
 
     private MenuItem FindTopLevelParent(MenuItem item)
     {
@@ -55,6 +50,7 @@ public partial class Sidebar : ComponentBase
             topParent = parent;
             current = parent;
         }
+
         return topParent;
     }
 
@@ -73,6 +69,7 @@ public partial class Sidebar : ComponentBase
                 return parent;
             }
         }
+
         return null;
     }
 
@@ -91,6 +88,7 @@ public partial class Sidebar : ComponentBase
                 return result;
             }
         }
+
         return null;
     }
 
