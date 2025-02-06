@@ -2,7 +2,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+    .AddInteractiveServerComponents(x => x.DetailedErrors = true);
 
 builder.Services.AddScoped<ISidebarService, SidebarService>();
 

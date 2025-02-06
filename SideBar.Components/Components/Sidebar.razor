@@ -14,3 +14,20 @@
         </ul>
     </aside>
 </div>
+
+<div class="sidebar-modal @(ShowModal ? "active" : "")">
+    <div class="modal-header">
+        <button class="left-btn" @onclick="@(CloseModal)">
+            <i class="fa fa-arrow-left"></i>
+        </button>
+        <h3>@ModalTitle</h3>
+        <button class="close-btn" @onclick="@(() => { CloseModal();
+                                                SidebarService.Toggle();
+                                            })">
+            <i class="fa fa-times"></i>
+        </button>
+    </div>
+    <div class="modal-content">
+        @ModalContent
+    </div>
+</div>

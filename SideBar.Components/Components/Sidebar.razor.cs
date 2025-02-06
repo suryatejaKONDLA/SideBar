@@ -7,6 +7,12 @@ public partial class Sidebar : ComponentBase
 
     [Parameter] public List<MenuItem> MenuItems { get; set; } = [];
 
+    private bool ShowModal = false;
+
+    private string ModalTitle = "";
+
+    private RenderFragment ModalContent = null;
+
     public void Dispose() { SidebarService.OnChange -= StateHasChanged; }
 
     protected override void OnInitialized() { SidebarService.OnChange += StateHasChanged; }
@@ -15,21 +21,48 @@ public partial class Sidebar : ComponentBase
 
     private void ToggleSubMenu(MenuItem item)
     {
-        if (ActiveParent != null && !IsInHierarchy(ActiveParent, item))
+        if (item.SubMenu.Any())
         {
-            CloseMenuBranch(ActiveParent);
-        }
+            if (ActiveParent != null && !IsInHierarchy(ActiveParent, item))
+            {
+                CloseMenuBranch(ActiveParent);
+            }
 
-        item.IsActive = !item.IsActive;
+            item.IsActive = !item.IsActive;
 
-        if (item.IsActive)
-        {
-            ActiveParent = FindTopLevelParent(item);
+            if (item.IsActive)
+            {
+                ActiveParent = FindTopLevelParent(item);
+            }
+            else if (ActiveParent == item)
+            {
+                ActiveParent = null;
+            }
         }
-        else if (ActiveParent == item)
+        else
         {
-            ActiveParent = null;
+            ShowModal = true;
+            ModalTitle = item.Title;
+            ModalContent = GetModalContent(item);
+            CloseMenuBranch(ActiveParent); 
         }
+    }
+
+    private RenderFragment GetModalContent(MenuItem item)
+    {
+        return builder =>
+        {
+            builder.OpenComponent(0, typeof(Home)); // Example component
+            builder.AddAttribute(1, "Title", item.Title);
+            builder.CloseComponent();
+        };
+    }
+
+    private void CloseModal()
+    {
+        ShowModal = false;
+        ModalTitle = "";
+        ModalContent = null;
     }
 
     private static bool IsInHierarchy(MenuItem parent, MenuItem target) { return parent == target || parent.SubMenu.Any(child => IsInHierarchy(child, target)); }
@@ -94,6 +127,7 @@ public partial class Sidebar : ComponentBase
 
     private static void CloseMenuBranch(MenuItem item)
     {
+        if (item is null) { return; }
         item.IsActive = false;
         foreach (var child in item.SubMenu)
         {
