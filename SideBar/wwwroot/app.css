@@ -199,13 +199,14 @@ h1:focus {
     width: 400px;
     height: 100vh;
     background: #1a1a1a;
-    transition: right 0.3s ease;
+    transition: left 0.3s ease;
     z-index: 1001;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
 }
 
     .sidebar-modal.active {
         right: 0;
+        left: 250px;
     }
 
 .wrapper.toggled .sidebar-modal.active {
