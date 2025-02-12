@@ -1,33 +1,55 @@
 ﻿@inject ISidebarService SidebarService
 @implements IDisposable
+
 <div class="wrapper @(SidebarService.IsToggled ? "toggled" : "")">
     <aside class="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a class="sidebar-toggle"
-               @onclick="ToggleSidebar">
+            <a class="sidebar-toggle" @onclick="ToggleSidebar">
                 <i class="fa fa-bars"></i>
             </a>
             <h2>@BrandTitle</h2>
         </div>
         <ul class="sidebar-nav">
-            @RenderMenuItems(MenuItems)
+            @{
+                foreach (var item in MenuItems)
+                {
+                    <li class="nav-item @(item.SubMenu.Any() ? "has-children" : "")">
+                        @if (item.SubMenu.Any())
+                        {
+                            <!-- Render a clickable menu item with an arrow -->
+                            <a href="javascript:void(0);" @onclick="() => OpenModal(item)">
+                                <i class="fa @item.Icon"></i>
+                                <span>@item.Title</span>
+                                <i class="fa fa-chevron-right arrow"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <!-- Render a normal link -->
+                            <a href="@item.Link" @onclick="CloseModal">
+                                <i class="fa @item.Icon"></i>
+                                <span>@item.Title</span>
+                            </a>
+                        }
+                    </li>
+                }
+            }
         </ul>
     </aside>
 </div>
 
+<!-- Modal for displaying submenu items -->
 <div class="sidebar-modal @(ShowModal ? "active" : "")">
     <div class="modal-header">
-        <button class="left-btn" @onclick="@(CloseModal)">
+        <button class="left-btn" @onclick="CloseModal">
             <i class="fa fa-arrow-left"></i>
         </button>
-        <h3>@ModalTitle</h3>
-        <button class="close-btn" @onclick="@(() => { CloseModal();
-                                                SidebarService.Toggle();
-                                            })">
+        <h3>@(ModalTitle)</h3>
+        <button class="close-btn" @onclick="() => { CloseModal(); SidebarService.Toggle(); }">
             <i class="fa fa-times"></i>
         </button>
     </div>
     <div class="modal-content">
-        @ModalContent
+        @(ModalContent)
     </div>
 </div>
