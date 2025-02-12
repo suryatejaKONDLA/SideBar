@@ -13,7 +13,7 @@ public partial class NavMenu
             SubMenu =
             [
                 new MenuItem { Title = "Plugin Manager", Link = "#" },
-                new MenuItem { Title = "Add New", Link = "#" }
+                new MenuItem { Title = "Add New Plugin", Link = "#" }
             ]
         },
 
@@ -25,7 +25,7 @@ public partial class NavMenu
             SubMenu =
             [
                 new MenuItem { Title = "All Users", Link = "#" },
-                new MenuItem { Title = "Add New", Link = "#" }
+                new MenuItem { Title = "Add New User", Link = "#" }
             ]
         }
     ];
