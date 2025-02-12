@@ -1,11 +1,16 @@
 ﻿@inherits LayoutComponentBase
 @inject ISidebarService SidebarService
+@inject IModalService ModalService
 
 <div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
-    <main @onclick="() => SidebarService.SetState(true)">
+    <main @onclick="@(() =>
+                    {
+                        SidebarService.SetState(true);
+                        ModalService.HideModal();
+                    })">
         <article class="content px-4">
             @Body
         </article>

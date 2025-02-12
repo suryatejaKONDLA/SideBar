@@ -5,6 +5,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents(x => x.DetailedErrors = true);
 
 builder.Services.AddScoped<ISidebarService, SidebarService>();
+builder.Services.AddScoped<IModalService, ModalService>();
 
 var app = builder.Build();
 

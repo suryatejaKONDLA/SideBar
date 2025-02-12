@@ -1,30 +1,36 @@
-﻿namespace SideBar.Components.Components;
+﻿#region
+
+using Microsoft.AspNetCore.Components.Rendering;
+
+#endregion
+
+namespace SideBar.Components.Components;
 
 public partial class Sidebar : ComponentBase
 {
+    // Sidebar brand title.
     [Parameter] public string BrandTitle { get; set; } = "My App";
 
-    [Parameter] public List<MenuItem> MenuItems { get; set; } = [];
-
-    private bool ShowModal = false;
-    private string ModalTitle = "";
-    private RenderFragment ModalContent = null;
-
-    protected override void OnInitialized()
-    {
-        SidebarService.OnChange += StateHasChanged;
-    }
+    // You can pass in your own list of menu items; if empty, the service's list is used.
+    [Parameter] public List<MenuItem> MenuItems { get; set; } = new();
 
     public void Dispose()
     {
         SidebarService.OnChange -= StateHasChanged;
+        ModalService.OnChange -= StateHasChanged;
     }
 
-    private void ToggleSidebar()
+    protected override void OnInitialized()
     {
-        SidebarService.Toggle();
+        SidebarService.OnChange += StateHasChanged;
+        ModalService.OnChange += StateHasChanged;
     }
 
+    private void ToggleSidebar() { SidebarService.Toggle(); }
+
+    /// <summary>
+    ///     Opens the modal to display submenu items for the clicked menu item.
+    /// </summary>
     private void OpenModal(MenuItem item)
     {
         if (!item.SubMenu.Any())
@@ -32,21 +38,20 @@ public partial class Sidebar : ComponentBase
             return;
         }
 
-        ShowModal = true;
-        ModalTitle = item.Title;
-        ModalContent = builder =>
+        ModalService.ShowModal(item.Title, ModalContent);
+        return;
+
+        void ModalContent(RenderTreeBuilder builder)
         {
             var seq = 0;
             builder.OpenComponent<SubMenuComponent>(seq++);
             builder.AddAttribute(seq, "Items", item.SubMenu);
             builder.CloseComponent();
-        };
+        }
     }
 
-    private void CloseModal()
-    {
-        ShowModal = false;
-        ModalTitle = "";
-        ModalContent = null;
-    }
+    /// <summary>
+    ///     Closes the modal.
+    /// </summary>
+    private void CloseModal() { ModalService.HideModal(); }
 }
