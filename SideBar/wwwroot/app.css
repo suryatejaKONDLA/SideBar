@@ -209,6 +209,11 @@ h1:focus {
         left: 250px;
     }
 
+    .sidebar-modal.active.shrink {
+        right: 0;
+        left: 60px;
+    }
+
 .wrapper.toggled .sidebar-modal.active {
     right: 0;
 }
