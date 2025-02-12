@@ -1,4 +1,4 @@
-﻿@inject ISidebarService SidebarService
+@inject ISidebarService SidebarService
 @inject IModalService ModalService
 @implements IDisposable
 
@@ -19,7 +19,6 @@
                         @{
                             if (item.SubMenu.Any())
                             {
-                                <!-- Render a clickable menu item with an arrow -->
                                 <a href="javascript:void(0);"
                                    @onclick="() => OpenModal(item)">
                                     <i class="fa @item.Icon"></i>
@@ -29,7 +28,6 @@
                             }
                             else
                             {
-                                <!-- Render a normal link -->
                                 <a href="@item.Link"
                                    @onclick="CloseModal">
                                     <i class="fa @item.Icon"></i>
@@ -44,8 +42,7 @@
     </aside>
 </div>
 
-<!-- Modal for displaying submenu items -->
-<div class="sidebar-modal @(ModalService.IsModalVisible ? "active" : "")">
+<div class="sidebar-modal @(ModalService.IsModalVisible ? "active" : "") @(SidebarService.IsToggled ? "shrink" : "")">
     <div class="modal-header">
         <button class="left-btn"
                 @onclick="CloseModal">
