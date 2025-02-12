@@ -1,18 +1,10 @@
-﻿#region
-
-using Microsoft.AspNetCore.Components.Rendering;
-
-#endregion
-
-namespace SideBar.Components.Components;
+﻿namespace SideBar.Components.Components;
 
 public partial class Sidebar : ComponentBase
 {
-    // Sidebar brand title.
     [Parameter] public string BrandTitle { get; set; } = "My App";
 
-    // You can pass in your own list of menu items; if empty, the service's list is used.
-    [Parameter] public List<MenuItem> MenuItems { get; set; } = new();
+    [Parameter] public List<MenuItem> MenuItems { get; set; } = [];
 
     public void Dispose()
     {
@@ -28,9 +20,6 @@ public partial class Sidebar : ComponentBase
 
     private void ToggleSidebar() { SidebarService.Toggle(); }
 
-    /// <summary>
-    ///     Opens the modal to display submenu items for the clicked menu item.
-    /// </summary>
     private void OpenModal(MenuItem item)
     {
         if (!item.SubMenu.Any())
@@ -50,8 +39,5 @@ public partial class Sidebar : ComponentBase
         }
     }
 
-    /// <summary>
-    ///     Closes the modal.
-    /// </summary>
     private void CloseModal() { ModalService.HideModal(); }
 }
